@@ -160,7 +160,11 @@ automated fees.
 
 ### Authentication & identity
 
-- **Students** sign in with **university SSO** (Google / Microsoft) — proving a `.edu` identity rather
+> 🚧 **Work in progress.** University `.edu` verification (SSO + SheerID, described next) is built but
+> **currently feature-flagged off while it's being finished** — an interim email sign-up is active today.
+> The design below is what the verification flow does when enabled.
+
+- **Students** will sign in with **university SSO** (Google / Microsoft) — proving a `.edu` identity rather
   than asserting one. **Enrollment** is then independently confirmed via **SheerID** before a student is
   matchable. The enrollment result is written **only by a service-role function** and is **bound to the
   caller's verified account by email**; the webhook path requires a shared secret. A student cannot

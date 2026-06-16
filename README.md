@@ -18,7 +18,7 @@
   <img src="https://img.shields.io/badge/Claude_API-C17D4A?style=flat&logo=anthropic&logoColor=white" alt="Claude API">
   <img src="https://img.shields.io/badge/AWS_S3_·_CloudFront-232F3E?style=flat&logo=amazonwebservices&logoColor=FF9900" alt="AWS S3 + CloudFront">
   <br>
-  <img src="https://img.shields.io/badge/stage-pilot-C17D4A?style=flat" alt="Stage: pilot">
+  <img src="https://img.shields.io/badge/status-work_in_progress-C17D4A?style=flat" alt="Status: work in progress">
   <img src="https://img.shields.io/badge/region-Raleigh·Durham·Chapel_Hill-8A7B6B?style=flat" alt="Region: the Triangle">
   <img src="https://img.shields.io/badge/built_by-Claude_Builder_Ambassador-A5683C?style=flat" alt="Built by a Claude Builder Ambassador">
 </p>
@@ -35,7 +35,14 @@
 
 > **About this repository.** This is a **public showcase** of TriangleAI for fellow developers —
 > what it does, why it exists, and how it's engineered. It contains **no application source code**;
-> everything here is documentation, diagrams, and screenshots of the live product running locally.
+> everything here is documentation, diagrams, and screenshots of the work-in-progress app running locally.
+
+> 🚧 **Project status — early work in progress.** TriangleAI is a large, actively-developed project: a
+> **working scaffold, not a finished or fully-functioning website yet.** The architecture, AI interview,
+> matching engine, and operator console run end-to-end in local demo mode, but features are at different
+> stages of completion, several integrations are still being wired up, and things will change. In
+> particular, **university `.edu` verification (SSO + SheerID) is a work in progress right now** — see
+> [Status &amp; roadmap](#status--roadmap). Treat this as a snapshot of an evolving build, not a launched product.
 
 ---
 
@@ -62,7 +69,7 @@ and high-signal.
 
 ## See it
 
-> Screenshots of the live app running locally (zero-config demo mode — seeded data, mock backend).
+> Screenshots of the work-in-progress app running locally (zero-config demo mode — seeded data, mock backend). It's an evolving scaffold, so expect rough edges.
 
 ### The landing page
 <p align="center">
@@ -101,7 +108,7 @@ Three steps for the customer. Matchmaking, not a board.
 
 ```mermaid
 flowchart LR
-    A["1 · Make an account<br/><small>university SSO or email</small>"] --> B["2 · Talk to the<br/>AI interviewer"]
+    A["1 · Make an account<br/><small>email · university SSO (WIP)</small>"] --> B["2 · Talk to the<br/>AI interviewer"]
     B --> C["Structured record<br/><small>need / profile</small>"]
     C --> D["AI-ranked match"]
     D --> E{"Human<br/>approval"}
@@ -115,8 +122,9 @@ flowchart LR
     class C,D,G,H soft;
 ```
 
-1. **Make an account.** Students sign in with their **university Google / Microsoft account** (proves a
-   `.edu` identity in seconds); businesses sign up with a work email. No long forms.
+1. **Make an account.** Businesses sign up with a work email. Students will sign in with their
+   **university Google / Microsoft account** to prove a `.edu` identity — **this verification flow is a
+   work in progress**, so an interim email sign-up is used today. No long forms.
 2. **Talk to the AI interviewer.** A short, adaptive chat captures the need or the skill set — no
    postings, no applications.
 3. **Get matched & introduced.** The engine ranks the best fits, **a person reviews and approves**, and
@@ -244,10 +252,12 @@ produces an empty queue.
 
 ### 4 · Trust, vetting & security
 
-- **Real identities.** Students authenticate with **university SSO** (Google / Microsoft) — a verified
-  `.edu` identity, not a self-asserted email.
-- **Independent enrollment check.** **SheerID** confirms active enrollment before a student is matchable.
-  The check is **server-confirmed and bound to the verified account** — a student cannot self-certify.
+- **Real identities (🚧 work in progress).** Students will authenticate with **university SSO** (Google /
+  Microsoft) for a verified `.edu` identity rather than a self-asserted email. The flow is built but
+  **currently feature-flagged off while it's being finished** — an interim email sign-up is active today.
+- **Independent enrollment check (🚧 work in progress).** **SheerID** is integrated to confirm active
+  enrollment before a student is matchable — **server-confirmed and bound to the verified account** so a
+  student cannot self-certify. It ships with the SSO verification above and is part of the same in-progress work.
 - **Row-Level Security everywhere.** Postgres RLS governs who can read or write each row. Cross-table
   authorization checks run in `SECURITY DEFINER` helper functions to keep policies non-recursive and
   auditable. Sensitive columns (e.g. verification flags) are writable **only** by a service-role function.
@@ -267,7 +277,8 @@ produces an empty queue.
 | Backend | Supabase (Postgres + RLS) | localStorage mock (dev) |
 
 The result: a clone runs with **`npm run dev` and zero environment variables** — seeded data, scripted
-interview, local scorer — and lights up real Claude, Supabase, SSO, and voice purely by adding keys.
+interview, local scorer — and lights up the real integrations (Claude, Supabase, and the rest) by adding
+keys and flipping the relevant feature flags as each one is finished.
 
 ---
 
@@ -279,7 +290,7 @@ interview, local scorer — and lights up real Claude, Supabase, SSO, and voice 
 | **Routing** | React Router | Public marketing site at `/`; authenticated app under `/app/*`. |
 | **Backend** | Supabase — Postgres · Auth · RLS · Edge Functions | Behind a swappable `Backend` interface; localStorage mock for dev. |
 | **AI** | Anthropic **Claude API** | Interview, extraction, and ranking — server-side only, with deterministic fallbacks. |
-| **Identity** | University SSO (Google / Microsoft) · SheerID | `.edu` proof + independent enrollment verification. |
+| **Identity** 🚧 | University SSO (Google / Microsoft) · SheerID | `.edu` proof + independent enrollment verification — **work in progress** (interim email sign-up active today). |
 | **Hosting** | AWS **S3 + CloudFront** | Static build; CI deploys on push to `main`. |
 | **Type safety** | TypeScript `strict` (`noUnusedLocals`) | Build is `tsc -b && vite build`. |
 
@@ -290,20 +301,26 @@ interview, local scorer — and lights up real Claude, Supabase, SSO, and voice 
 
 ## Status & roadmap
 
-**Stage:** pilot, single-region (the Triangle — UNC · Duke · NC State). Every match is approved by a
-human operator.
+**Stage: early work in progress — a scaffold, not a finished product.** TriangleAI is being built for a
+single region (the Triangle — UNC · Duke · NC State), with every match approved by a human operator. It
+is **not deployed as a fully-functioning public website yet.** The legend below reflects where each
+piece actually stands:
+
+> ✅ working in the development scaffold (local demo mode) · 🚧 in progress · 🔜 planned
 
 - ✅ Conversational AI interview (text) with structured extraction
 - ✅ AI-ranked matching with explainable rationale + deterministic fallback
-- ✅ University SSO `.edu` verification + SheerID enrollment checks
 - ✅ Operator console: match queue, approvals, engagements
-- ✅ RLS, rate limiting, graceful degradation across every AI path
+- ✅ RLS, rate limiting, and graceful degradation across every AI path
+- 🚧 **University `.edu` verification (SSO + SheerID)** — built, but currently feature-flagged off and
+  being finished; an interim email sign-up is active today
+- 🚧 Production wiring &amp; end-to-end hardening — the live, deployed experience is still coming together
 - 🔜 Optional voice intake (spec'd; off by default)
-- 🔜 **Phase 2:** Stripe Connect for in-app payouts + automated service fee (pilot bills manually today)
+- 🔜 **Phase 2:** Stripe Connect for in-app payouts + automated service fee (engagements are billed manually today)
 - 🔜 Multi-region scale-out and a purpose-built agent catalog
 
-**Business model:** a service fee per engagement (default **18%**) plus a monthly retainer for active
-businesses. Customer value: roughly **20% of typical agency cost**, delivered in days.
+**Business model (target):** a service fee per engagement (default **18%**) plus a monthly retainer for
+active businesses. Customer value: roughly **20% of typical agency cost**, delivered in days.
 
 ---
 

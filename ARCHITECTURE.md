@@ -1,242 +1,108 @@
 # Architecture
 
-A developer-oriented tour of how TriangleAI is built. This document describes the system at a
-conceptual level — **it contains no application source code.** For the high-level overview and
-screenshots, see the [README](README.md).
+A developer-oriented tour of how the Hephaestus site is built. Conceptual only — **this document
+contains no proprietary source code.** For the overview and screenshots, see the [README](README.md).
 
-The three ideas that shape everything:
+Hephaestus's public site is deliberately simple where it can be and detailed where it counts: a
+**static single-page React app** with **no backend**, whose one piece of real engineering is a
+hand-written **canvas particle engine** and a carefully choreographed, accessible motion layer.
 
-1. **Swap seams** — every external dependency sits behind an interface with a dev implementation and a
-   production implementation, so the whole product runs locally with zero configuration.
-2. **Server-side AI** — Claude is only ever called from the server; the browser never holds a key.
-3. **Graceful degradation** — every AI path has a deterministic fallback, so the product bends instead
-   of breaking.
+The ideas that shape it:
+
+1. **Static and self-contained** — no server, no database, no API keys in the browser. It builds to
+   plain files and serves from a CDN.
+2. **One signature interaction, done well** — a single canvas engine carries the whole "forge"
+   identity instead of a pile of libraries.
+3. **Fast and accessible by default** — a performance budget, reduced-motion support, and zero layout
+   shift are requirements, not afterthoughts.
 
 ---
 
 ## 1. Frontend
 
-A single-page app built with **React 18 + TypeScript + Vite**.
-
-- **Two surfaces, one build.** A public marketing site at `/` and an authenticated application under
-  `/app/*` (operator console, interview/intake, match status, profile), plus a separate scroll-driven
-  interactive demo built as its own Vite entry.
-- **Design system.** The marketing site uses a **hand-rolled CSS-variable design system** — a warm
-  cream / terracotta palette with Lora (serif headings) and DM Sans (body). Design tokens (color, type
-  scale, radii, warm-tinted shadows, spacing) live in one stylesheet. **Tailwind is deliberately scoped
-  to the interactive demo only**, so it never leaks into the main site's tokens.
-- **Strict TypeScript.** The build runs `tsc -b && vite build` with `strict` and `noUnusedLocals`.
+- **Stack.** React 18 + TypeScript + Vite, built to a static bundle (`tsc -b && vite build`) with
+  `strict` and `noUnusedLocals`.
+- **Single page.** The entry (`main.tsx`) mounts one marketing page composed of sections — hero,
+  pillars, services, process, work, about, contact. No router, no authenticated area, no data layer.
+- **Design system.** A hand-rolled CSS-variable system: a warm **iron-black + molten-ember** forge
+  palette, JetBrains Mono for headings, Inter for body. Tokens live in one stylesheet.
 
 ---
 
-## 2. The swap-seam pattern
+## 2. The forge — InkField
 
-The same pattern recurs for every external dependency: define an interface, provide a **dev**
-implementation (no network, deterministic, seeded) and a **production** implementation, and select
-between them at the edge.
-
-| Concern | Interface | Dev implementation | Production implementation |
-|---|---|---|---|
-| Data & auth | `Backend` | localStorage mock (seeded) | Supabase (Postgres · Auth · RLS · Edge Functions) |
-| AI interview | Interview provider | Deterministic scripted interview | Claude (text) · live voice (opt-in) |
-| Identity | Identity / SSO | Demo sign-in (any `.edu`) | University SSO via Google / Microsoft |
-| Enrollment | Enrollment verifier | Auto-approve | SheerID + server webhook |
-| LLM transport | LLM client | Vite dev API route | Supabase Edge Function |
-
-Because the selection happens behind the interface, **app code is identical in both modes.** A
-contributor can clone the repo and run the entire experience — interview, ranking, operator queue —
-with `npm run dev` and **no environment variables at all**. Adding keys lights up the real services
-incrementally (e.g. an Anthropic key alone upgrades the local interview from scripted to live Claude
-while everything else stays mocked).
-
----
-
-## 3. The AI layer
-
-### Keys never reach the browser
-
-All Claude calls are proxied through the server:
-
-- **Locally**, a small Vite dev API exposes routes for the interview turn, structured extraction, and
-  match ranking.
-- **In production**, the same responsibilities are Supabase **Edge Functions**, sharing a common LLM
-  helper module.
-
-The client talks to a single transport abstraction and never holds an API key.
-
-### Three AI responsibilities
+The background is a fixed, full-page HTML5 Canvas engine (~800 lines, no animation dependencies).
 
 ```mermaid
-flowchart LR
-    subgraph AI["AI responsibilities (server-side)"]
-        I["Conversational interview<br/><small>adaptive Q&A</small>"]
-        E["Structured extraction<br/><small>chat → BusinessNeed / StudentProfile</small>"]
-        R["Match ranking<br/><small>need × candidates → ranked shortlist</small>"]
+flowchart TB
+    subgraph Field["InkField · 2D canvas · requestAnimationFrame"]
+        FLOW["Value-noise flow field<br/><small>~1800 particles · 900 on mobile</small>"]
+        SPRING["Spring to shape targets<br/><small>wordmark · anvil · grid · wave · stat</small>"]
+        REACT["Reactive layer<br/><small>cursor bloom · hammer-strike sparks</small>"]
     end
-    I --> E --> R
-    classDef soft fill:#F5EFE8,stroke:#E8E0D8,color:#3D2B1A;
-    class I,E,R soft;
+    SCROLL["IntersectionObserver<br/>[data-shape] sections"] --> SPRING
+    FLOW --> SPRING --> REACT
+    classDef accent fill:#ff6a1a,stroke:#e64a19,color:#0c0a09;
+    classDef soft fill:#1a1512,stroke:#3a2f27,color:#f5efe8;
+    class FLOW,SPRING accent;
+    class REACT,SCROLL soft;
 ```
 
-1. **Interview** — an adaptive conversation that asks only what it still needs.
-2. **Extraction** — turns the free-form conversation into a typed, structured record.
-3. **Ranking** — scores candidates against a need and returns a shortlist with rationale.
+- **Flow.** Each particle reads a single-octave 3D value-noise field for its heading and is drawn as a
+  short additive streak. Density is bucketed into a forge heat ramp, so sparse regions read as cooling
+  red and dense regions as white-hot.
+- **Morph.** Each scroll section carries a `data-shape`; an `IntersectionObserver` selects the active
+  one and particles spring toward points sampled from that shape — text like "Hephaestus", the anvil
+  silhouette, a grid, a wave, a stat.
+- **React.** On a fine pointer, a pre-rendered white-hot bloom follows the cursor and gently gathers
+  nearby embers. A click is a **hammer strike**: an expanding shockwave ring perturbs the field and a
+  burst of sparks flies out, arcs under gravity, and cools as it fades.
 
-### Fallbacks
+### Performance & accessibility guards
 
-Each responsibility has a deterministic counterpart. If Claude is unavailable, errors, or is
-rate-limited — at the **start of a session or mid-session** — the UI transparently falls back:
-
-| Responsibility | Primary | Fallback |
-|---|---|---|
-| Interview | Claude conversational intake | Deterministic scripted interview |
-| Extraction | Claude structured extraction | Heuristic field mapping |
-| Ranking | Claude ranker | Local weighted scorer |
-| Voice | Live voice provider | Text chat (voice is opt-in, off by default) |
-
----
-
-## 4. The matching engine
-
-For each business need, the engine scores every eligible candidate across six weighted dimensions:
-
-| Dimension | Weight |
-|---|:--:|
-| Skill overlap | 0.30 |
-| Budget ↔ rate fit | 0.18 |
-| Availability ↔ timeline | 0.14 |
-| Complexity ↔ student level | 0.14 |
-| Interest / industry alignment | 0.12 |
-| Location / remote fit | 0.12 |
-
-Key properties:
-
-- **One source of truth for the weights.** The Claude ranker and the local fallback scorer read the
-  **same** weight configuration, so rankings are consistent and explainable no matter which path ran.
-- **Explainable output.** Each candidate carries a fit score and a plain-English rationale that the
-  operator sees in the queue.
-- **Pool floor before geography widening.** A minimum candidate pool is guaranteed before the location
-  filter is relaxed, so a thin local pool never yields an empty shortlist.
+- Baked **exposure cap** on additive alpha so peaks can't accumulate to a blinding white.
+- **Device pixel ratio clamped** (≤1.5) and particle count halved on mobile.
+- **`prefers-reduced-motion`**: no animation loop at all — a single static formed frame is drawn, and
+  the click/hover effects are disabled.
+- The loop pauses on `visibilitychange`; every listener, rAF, resize timer, and observer is disposed
+  on unmount (safe under React StrictMode's development double-mount).
 
 ---
 
-## 5. Data model & lifecycle
+## 3. Motion layer
 
-The interview produces structured records; matches and engagements move through explicit states.
+- **Scroll reveals.** Section blocks fade and slide in with **Framer Motion** `whileInView` (once).
+- **Forge titles.** A small `ForgeTitle` component animates headings from white-hot to their rest
+  color as they enter view; under reduced motion it renders a plain heading with no animation.
+- **Zero layout shift text.** Paragraph line breaks are measured off-DOM (a pretext pass) so each line
+  animates in with its height reserved up front — no reflow, no jump.
+
+---
+
+## 4. Deployment
 
 ```mermaid
 flowchart LR
-    BN["BusinessNeed"]:::soft
-    SP["StudentProfile"]:::soft
-    BN --> M["Match"]:::accent
-    SP --> M
-    M --> EN["Engagement"]:::soft
-
-    classDef accent fill:#C17D4A,stroke:#A5683C,color:#fff;
-    classDef soft fill:#F5EFE8,stroke:#E8E0D8,color:#3D2B1A;
+    DEV["git push → main"] --> GHA["GitHub Actions"]
+    GHA --> BUILD["tsc -b && vite build"]
+    BUILD --> S3["aws s3 sync dist/ → S3"]
+    S3 --> CF["CloudFront invalidation"]
+    CF --> USERS["usehephaestus.com"]
+    classDef accent fill:#ff6a1a,stroke:#e64a19,color:#0c0a09;
+    class GHA,BUILD accent;
 ```
 
-The engagement lifecycle is a small state machine, gated by human approval and mutual acceptance:
-
-```mermaid
-stateDiagram-v2
-    [*] --> ranked
-    ranked --> approved: operator approves
-    approved --> introduced: introduction sent
-    introduced --> accepted: both sides accept
-    accepted --> in_progress
-    in_progress --> delivered
-    delivered --> paid
-    paid --> [*]
-```
-
-A computed **service fee** (default 18%) is attached to each engagement. During the pilot, invoicing is
-manual / off-platform; Phase 2 introduces Stripe Connect behind a feature flag for in-app payouts and
-automated fees.
+- **Build:** static bundle to `dist/`.
+- **Host:** **AWS S3 + CloudFront**. GitHub Actions builds and deploys on every push to `main`,
+  authenticating to AWS via **GitHub OIDC** — a short-lived role assumption, with no long-lived AWS
+  keys stored in the repo — then syncs `dist/` to S3 and invalidates the CDN.
 
 ---
 
-## 6. Security model
+## Design principles, one line each
 
-### Authentication & identity
-
-> 🚧 **Work in progress.** University `.edu` verification (SSO + SheerID, described next) is built but
-> **currently feature-flagged off while it's being finished** — an interim email sign-up is active today.
-> The design below is what the verification flow does when enabled.
-
-- **Students** will sign in with **university SSO** (Google / Microsoft) — proving a `.edu` identity rather
-  than asserting one. **Enrollment** is then independently confirmed via **SheerID** before a student is
-  matchable. The enrollment result is written **only by a service-role function** and is **bound to the
-  caller's verified account by email**; the webhook path requires a shared secret. A student cannot
-  self-certify enrollment.
-- **Businesses** sign up with a work email (passwordless email OTP), with an optional password.
-- **Operators** have a dedicated `admin` role that gates the match queue, approvals, and engagement
-  views.
-
-### Row-Level Security
-
-Authorization lives in the database. Postgres **RLS policies** govern every table's reads and writes.
-Cross-table checks (e.g. "does this user own the business need behind this match?") are factored into
-`SECURITY DEFINER` helper functions, which keeps policies:
-
-- **Non-recursive** — a policy on `matches` that needs to consult `business_needs` calls a helper rather
-  than referencing the other table's policies inline (which previously caused infinite policy
-  recursion — now resolved).
-- **Auditable** — the authorization logic is named and centralized.
-
-Sensitive columns (verification flags, enrollment status) are **not writable by clients at all** — only
-the relevant service-role function can set them.
-
-### Rate limiting
-
-```mermaid
-flowchart LR
-    C["Client"] --> RL["Inbound limiter<br/><small>DB-backed · atomic</small>"]
-    RL --> F["Edge Function"]
-    F --> OUT["Outbound resilient fetch<br/><small>backoff · bounded concurrency · respects Retry-After</small>"]
-    OUT --> EXT["Anthropic · SheerID · others"]
-
-    classDef accent fill:#C17D4A,stroke:#A5683C,color:#fff;
-    classDef soft fill:#F5EFE8,stroke:#E8E0D8,color:#3D2B1A;
-    class RL,OUT accent;
-    class F soft;
-```
-
-- **Inbound:** a database-backed **atomic** limiter protects every Edge Function. Sensitive endpoints
-  carry both a global cap and a stricter per-identity cap to resist spoofing.
-- **Outbound:** calls to third-party APIs go through a resilient fetch wrapper with retry + exponential
-  backoff, bounded concurrency, and respect for `Retry-After`. Non-idempotent sends retry only on
-  explicit rate-limit responses.
-
----
-
-## 7. Local development & zero-config demo
-
-The seeded mock backend makes the product fully explorable offline:
-
-- A seeded **operator** account, a pool of `.edu`-verified students who have completed interviews, and a
-  business with an open need — so the **match queue is populated on first run**.
-- The interview runs as a deterministic script; ranking uses the local scorer; identity uses a demo
-  sign-in. Nothing leaves the machine.
-- State lives in `localStorage` under a namespaced prefix and resets cleanly.
-
-This is the mode the screenshots in the README were captured from.
-
----
-
-## 8. Deployment
-
-- **Build:** `npm run build` → a static bundle (the marketing site, the app, and the interactive demo as
-  separate entries).
-- **Host:** **AWS S3 + CloudFront**. A CI pipeline builds, uploads, and invalidates the CDN on every push
-  to `main`. SPA routing is handled at the edge so deep links resolve.
-
----
-
-## Design principles, in one line each
-
-- **Interfaces over integrations** — depend on a seam, not a vendor.
-- **The server holds the secrets** — never the browser.
-- **Always have a Plan B** — every AI call degrades to deterministic behavior.
-- **Authorization in the database** — RLS + `SECURITY DEFINER`, not just app checks.
-- **A human approves** — AI ranks and drafts; a person decides.
+- **Static beats a server you don't need** — no backend, no keys, nothing to run.
+- **One signature, engineered well** — a single canvas engine over a pile of animation libraries.
+- **Reduced motion is a first-class path** — not a stripped afterthought.
+- **Zero layout shift** — measure text, reserve space, then animate.
+- **Deploy on merge** — push to main, CI ships it.

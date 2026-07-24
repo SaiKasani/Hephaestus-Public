@@ -1,6 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <title>TriangleAI mark</title>
-  <polygon points="32 8 60 58 4 58"
-           fill="#C17D4A" stroke="#C17D4A"
-           stroke-width="6" stroke-linejoin="round"/>
+  <title>Hephaestus mark</title>
+  <defs>
+    <linearGradient id="ember" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9c7"/>
+      <stop offset="0.5" stop-color="#ff8a3d"/>
+      <stop offset="1" stop-color="#e64a19"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(6 8) scale(2.3)">
+    <path d="M1 8.5 L4 7 L21 7 L21 10 L15 10 L14 13.5 L18 13.5 L19 17 L5 17 L6 13.5 L10 13.5 L9 10 L4 10 Z" fill="url(#ember)"/>
+  </g>
 </svg>

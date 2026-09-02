@@ -1,162 +1,138 @@
 <p align="center">
-  <img src="assets/hero-banner.svg" alt="Hephaestus — AI automation, forged into working tools for businesses across the US." width="100%">
-</p>
-
-<h1 align="center">Hephaestus</h1>
-
-<p align="center">
-  <strong>An automated AI automation studio. Data cleanup, workflow automation, chatbots,
-  document processing, and internal tools — scoped fast, forged in days, at a fraction of agency cost.</strong><br>
-  <em>AI, forged into working tools.</em>
+  <img src="assets/banner.png" width="100%" alt="Hephaestus banner: a hammer drawn as a constellation on a night sky, with the wordmark and the line &quot;AI, forged into working tools.&quot;">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React_18-20232A?style=flat&logo=react&logoColor=61DAFB" alt="React 18">
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white" alt="Vite">
-  <img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=flat&logo=framer&logoColor=white" alt="Framer Motion">
-  <img src="https://img.shields.io/badge/HTML5_Canvas-E34F26?style=flat&logo=html5&logoColor=white" alt="HTML5 Canvas">
-  <img src="https://img.shields.io/badge/AWS_S3_·_CloudFront-232F3E?style=flat&logo=amazonwebservices&logoColor=FF9900" alt="AWS S3 + CloudFront">
-  <br>
-  <img src="https://img.shields.io/badge/status-live-ff6a1a?style=flat" alt="Status: live">
-  <img src="https://img.shields.io/badge/serving-United_States-8A7B6B?style=flat" alt="Serving: United States">
-  <img src="https://img.shields.io/badge/built_on-Claude-ff6a1a?style=flat&logo=anthropic&logoColor=white" alt="Built on Claude">
+  <sub>AI AUTOMATION STUDIO · UNITED STATES · REMOTE</sub>
 </p>
 
 <p align="center">
-  <a href="#what-it-is">What it is</a> ·
-  <a href="#see-it">See it</a> ·
-  <a href="#how-it-works">How it works</a> ·
-  <a href="#what-we-forge">What we forge</a> ·
-  <a href="#under-the-hood">Under the hood</a> ·
-  <a href="#tech-stack">Tech stack</a> ·
-  <a href="#about">About</a>
+  <strong>A student-led studio that puts an engineer inside your team: forward-deployed, not handed to an account manager.<br>
+  We build the work your people still do by hand into a tool that does it for them.</strong>
 </p>
-
-> **About this repository.** A **public showcase** of Hephaestus for fellow developers — what it is
-> and how the site is engineered. It contains **no proprietary source code**; everything here is
-> documentation, diagrams, and screenshots.
-
----
-
-## What it is
-
-Every small and mid-size business keeps hearing *"AI could do that for you."* The unanswered question
-is always the same: **okay, but who actually builds it?** Agencies are expensive and slow. Freelancer
-marketplaces are noisy and unvetted. Nobody on the team has time to wire the tools together.
-
-**Hephaestus closes that gap.** It's an automated AI automation studio for businesses across the
-United States: you bring the raw problem, Hephaestus scopes it into a **fixed quote fast**, forges the
-solution **in days**, and hands it over — documented, tested, and yours to keep. No agency overhead,
-no lock-in, senior-level engineering on every job.
-
----
-
-## See it
 
 <p align="center">
-  <img src="assets/screenshots/landing-hero.png" alt="The Hephaestus landing page — an interactive forge" width="90%">
+  <em>Fixed quotes. Senior-level engineering. Forged in days.</em>
 </p>
 
-The site itself is the demo: a single-page **interactive forge**. A full-page canvas ember field flows
-and morphs into the wordmark and an anvil, cursor motion stirs the embers, and clicking anywhere throws
-a **hammer-strike shower of sparks**. Fast by design, and it respects `prefers-reduced-motion`.
+<p align="center">
+  <a href="https://usehephaestus.com"><img src="https://img.shields.io/badge/live-usehephaestus.com-9E3520?style=flat-square&labelColor=3B2A1C" alt="Live at usehephaestus.com"></a>
+  <a href="mailto:kasani@business.unc.edu"><img src="https://img.shields.io/badge/contact-kasani%40business.unc.edu-B0572A?style=flat-square&labelColor=3B2A1C" alt="Contact by email"></a>
+  <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/read-ARCHITECTURE.md-C9A24A?style=flat-square&labelColor=3B2A1C" alt="Read the architecture write-up"></a>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/hero.png" width="100%" alt="The live Hephaestus site: a vellum sheet with torn edges and watercolour washes, the headline &quot;Hephaestus forges workflow automation.&quot; in serif with the second line in rubric red, a Homeric note in the right margin, and a jointed wooden automaton hammering an anvil at the lower right.">
+</p>
+
+> **i · Acting of itself.**
+> *Automaton* is Greek — αὐτόματον, the thing that acts of itself. Homer uses the adverb of the gates
+> of heaven, which swing open with nobody touching them. The word is three thousand years older than
+> the industry that borrowed it.
+>
+> <sub>ILIAD V. 749</sub>
 
 ---
 
-## How it works
+<sub>I · HEAT</sub>
 
-Four steps. Days, not weeks.
+## No overhead. *No lock-in.* No waiting.
 
-```mermaid
-flowchart LR
-    A["1 · Bring the<br/>raw problem"] --> B["2 · Fixed quote,<br/>fast"]
-    B --> C["3 · Hephaestus<br/>forges it"]
-    C --> D["4 · Handoff +<br/>walkthrough"]
-    classDef accent fill:#ff6a1a,stroke:#e64a19,color:#0c0a09;
-    classDef soft fill:#1a1512,stroke:#3a2f27,color:#f5efe8;
-    class A,C accent;
-    class B,D soft;
-```
+Engagements stay small and direct: the senior builder who scopes your project is the one who forges it.
 
-1. **Bring the raw problem.** A quick call or message. Honest about fit — if it's not right, we say so.
-2. **Fixed quote, fast.** Clear scope, a fixed price, and a delivery date — usually within a day.
-3. **Hephaestus forges it.** Visible progress and a working result in days. No black boxes.
-4. **Handoff + walkthrough.** Everything handed over with a short walkthrough. Yours, no lock-in.
+**01 · A fraction of agency cost.** No sales layer, no account management baked into the price. You pay for the build itself.
 
----
+**02 · Production quality.** Documented, tested, and yours to keep. Ships with the code, the docs, and a walkthrough.
+
+**03 · Days, not weeks.** Same-day first reply, a fixed quote within a day, most projects delivered inside a week.
+
+<sub>II · DRAW</sub>
 
 ## What we forge
 
-| Service | What it covers |
+| Service | What it is |
 |---|---|
-| **Data cleanup** | Messy spreadsheets → clean, deduped, normalized, enriched. |
-| **Workflow automation** | Stitch tools together; replace manual copy-paste with one-click pipelines. |
-| **Chatbots & assistants** | Internal Q&A and customer-facing bots, scoped to your docs. |
-| **Document processing** | Structured data pulled from contracts, invoices, intake forms, PDFs. |
-| **Internal tools** | A working v1 of the dashboard or admin tool you keep meaning to build. |
+| **Data cleanup** | Hand over the messy spreadsheet; get back clean, deduped, consistently formatted data. |
+| **Workflow automation** | The repetitive copy-paste task that eats a week becomes a one-click job that runs itself. |
+| **Chatbots & assistants** | A helper that answers questions from your own docs — for your team or your customers. |
+| **Document processing** | Contracts, invoices, intake forms, PDFs: the numbers and details you need, pulled out and organized. |
+| **Internal tool prototyping** | The dashboard or admin tool you keep meaning to build, delivered as a working v1 in days. |
+| **Something else?** | If it can be made faster or smarter with AI, it probably fits. |
 
-A starting menu, not a fence — anything that can be sped up with AI likely fits, and gets scoped up front.
+A starting menu, not a limit.
 
----
+<sub>III · BLOW</sub>
+
+## The sheet
+
+<p align="center">
+  <img src="assets/screenshots/why.png" width="536" alt="The &quot;No overhead. No lock-in. No waiting.&quot; section of the live site: the numbered pillars set on the vellum sheet, with the second Homeric margin note beside them.">
+  <img src="assets/screenshots/phone-hero.png" width="168" alt="The same hero on a phone: the sheet reflows to one column and the margin note narrows beside it.">
+</p>
+
+<p align="center">
+  <sub>The pillars and the second note in the margin · the phone band.</sub>
+</p>
+
+The site is one HTML file and one TypeScript module, no framework. Scroll turns the hour, dawn to
+night, and each of seven hammer blows throws wet pigment into the marginalia column, where the words
+flow around the blot's own outline. The ink lands in the margin; the hand writes round it.
+
+**[How it is built → ARCHITECTURE.md](ARCHITECTURE.md)**
+
+<sub>IV · STRIKE</sub>
+
+## Four steps, start to handoff
+
+1. **Bring us the raw problem.** A quick call to walk through what you need. We are honest about fit.
+2. **Fixed quote, fast.** A clear scope, a fixed price, a delivery date usually within a day, and no hourly meter.
+3. **We forge it.** Visible progress and a working result in days, no black boxes.
+4. **Handoff + walkthrough.** Handed over with a short walkthrough so your team can run it. It's yours.
+
+<sub>V · WELD</sub>
+
+## The shape of an engagement
+
+The three below are illustrative — the shape of the work we take on, not named client engagements.
+
+| | Problem | Result |
+|---|---|---|
+| **Law-firm intake extraction** | Paralegals hand-keying details from hundreds of intake PDFs. | Clean, structured records in minutes — reviewed, not retyped. |
+| **Ops dashboard** | Weekly numbers scattered across five spreadsheets and a CRM. | One live dashboard the whole team checks each morning. |
+| **Support chatbot** | The same twenty questions filling up the support inbox all day. | Instant answers on-site; the inbox is for real issues now. |
+
+<sub>THIS REPOSITORY</sub>
 
 ## Under the hood
 
-> The part for fellow developers. Full write-up in **[ARCHITECTURE.md](ARCHITECTURE.md)**.
+No source code here: this repo is documentation, diagrams, and screenshots. The engineering write-up
+lives in **[ARCHITECTURE.md](ARCHITECTURE.md)**: the scroll-driven colour system, the inverse-kinematic
+figure, the three-canvas watercolour model, and the margin trick where a paint-less float and the ink
+over it are clipped to one shared polygon so the text wrap and the blot agree to the decimal.
 
-The Hephaestus site is a **single-page React + Vite app**, statically built and served from **AWS S3 +
-CloudFront**, deployed by GitHub Actions on every push to `main`. No backend, no database, no API keys
-in the browser — the signature is a hand-written **HTML5 Canvas particle engine**.
+- **Front end.** One static `index.html` plus one typed module, `src/sheet.ts`: 25 kB of JS, 11 kB gzipped.
+- **Dependencies.** Zero at runtime. `typescript` and `vite` are the only devDependencies.
+- **Renders without JavaScript.** The CSS defaults are a composed late-dusk moment; the script is enhancement.
+- **Hosting.** AWS S3 and CloudFront, deployed by GitHub Actions on push to `main` via OIDC.
 
-### The forge (InkField)
+<sub>VI · QUENCH</sub>
 
-The ambient background is one ~800-line canvas engine, with no animation dependencies:
+## Small studio. National reach.
 
-- **Value-noise flow field.** ~1,800 particles (900 on mobile) advected through a single-octave 3D
-  value-noise field, drawn as additive streaks in a forge heat ramp (forge-red → molten orange → spark
-  amber → white-hot).
-- **Morph targets.** Particles spring toward points sampled from a shape per scroll section — the
-  "Hephaestus" wordmark, an anvil, a grid, a wave — chosen by an `IntersectionObserver` over
-  `[data-shape]` sections.
-- **Reactive.** A white-hot bloom follows the cursor and gathers embers; a **hammer-strike** on click
-  emits an expanding shockwave ring plus a gravity-arced spark burst.
-- **Bounded + accessible.** A baked exposure cap stops density from blowing out to white; device pixel
-  ratio is clamped; `prefers-reduced-motion` draws a single static frame with no loop; every listener,
-  rAF, and observer is torn down on unmount (safe under React StrictMode).
+An independent AI automation studio working with businesses across the United States: data cleanup,
+document processing, assistants, and the internal tools teams keep wishing they had. Book a 30-minute
+call and you'll leave it with next steps and a fixed quote the same day.
 
-### Motion
+- **Web** · [usehephaestus.com](https://usehephaestus.com)
+- **Contact** · [kasani@business.unc.edu](mailto:kasani@business.unc.edu)
+- **Built by** · Sai Kasani · CS + Finance, UNC · Claude Builder Ambassador
 
-Section content reveals with **Framer Motion** (`whileInView`), headings **cool from white-hot** as
-they scroll in (a small `ForgeTitle` component, with a plain-text fallback under reduced motion), and
-paragraph line breaks are pre-measured off the DOM so text reveals with **zero layout shift**.
-
----
-
-## Tech stack
-
-| Layer | Choice | Notes |
-|---|---|---|
-| **Frontend** | React 18 · TypeScript · Vite | Single-page marketing site; static build. |
-| **Design system** | Hand-rolled CSS variables | Warm iron-black + molten-ember forge palette; JetBrains Mono + Inter. |
-| **Motion** | Framer Motion + HTML5 Canvas | Scroll reveals + the InkField particle/spark engine. |
-| **Analytics** | PostHog | Loaded lazily after paint, off the critical render path. |
-| **Hosting** | AWS **S3 + CloudFront** | GitHub Actions deploys on push to `main` via OIDC — no long-lived keys. |
-| **Type safety** | TypeScript `strict` (`noUnusedLocals`) | Build is `tsc -b && vite build`. |
-
-> Built on Anthropic's **Claude** — AI-native, not AI-bolted-on.
-
----
-
-## About
-
-**Hephaestus** is an automated AI automation studio serving businesses across the United States —
-senior-level engineering, fixed quotes, delivery in days, no agency overhead.
-
-- **Web:** [usehephaestus.com](https://usehephaestus.com)
-- **Built by:** Sai Kasani — CS + Finance, UNC · Claude Builder Ambassador
-- **Contact:** [sai.kasani@lafayettestandard.com](mailto:sai.kasani@lafayettestandard.com)
+> **viii · Honest about fit.**
+> A blot that has begun to dry cannot be lifted clean — the pigment has already sunk into the fibre and
+> what comes off is only the surface. So the answer arrives on the call, not in a proposal three weeks
+> later: if it isn't a good job for us we will say so while it is still wet.
 
 <p align="center">
-  <img src="assets/mark.svg" alt="" width="34"><br>
-  <sub>© 2026 Hephaestus. This repository is a public showcase and contains no proprietary source code.</sub>
+  <img src="assets/mark.svg" width="30" alt=""><br>
+  <sub>© 2026 Hephaestus · Sai Kasani</sub>
 </p>
